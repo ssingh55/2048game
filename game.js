@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let highScore = 0;
     let board = [];
+    let promptShown = false;
 
     // Variables to store initial touch coordinates
     let initialX = null;
@@ -59,6 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 tile.textContent = tileValue !== 0 ? tileValue : '';
                 gameContainer.appendChild(tile);
                 positionTile(tile, i, j);
+
+                if (tileValue === 2048 && !promptShown) {
+                    // Prompt the user
+                    const shouldContinue = window.confirm('Congratulations! You have solved 2048 the Game of 2s! Do you want to continue?');
+
+                    if (!shouldContinue) {
+                        // If the user chooses not to continue, start a new game
+                        newGame();
+                        return;
+                    }
+                    // Set the promptShown flag to true after showing the prompt
+                    promptShown = true;
+                    // If the user chooses to continue, you can add additional logic here
+                }
             }
         }
 
