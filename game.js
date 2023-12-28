@@ -1,414 +1,342 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const boardSize = 4;
-    const board = [];
+document.addEventListener('DOMContentLoaded', () => {
+    const gameContainer = document.getElementById('game-container');
+    const scoreElement = document.getElementById('score');
+    const highScoreElement = document.getElementById('high-score');
+    const newGameButton = document.getElementById('new-game-btn');
+
     let score = 0;
+    let highScore = 0;
+    let board = [];
 
-    // Initialize the game board
+    // Variables to store initial touch coordinates
+    let initialX = null;
+    let initialY = null;
+
+    // Function to initialize the game board
     function initializeBoard() {
-        for (let i = 0; i < boardSize; i++) {
-            board[i] = [];
-            for (let j = 0; j < boardSize; j++) {
-                board[i][j] = 0;
+        const newBoard = [];
+        for (let i = 0; i < 4; i++) {
+            newBoard[i] = [];
+            for (let j = 0; j < 4; j++) {
+                newBoard[i][j] = 0;
             }
         }
-        addNewTile();
-        addNewTile();
-        updateBoard();
+        return newBoard;
     }
 
-    // Add a new tile to the board
-    function addNewTile() {
-        const availableTiles = [];
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
+    function getRandomAvailableCell() {
+        const availableCells = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
                 if (board[i][j] === 0) {
-                    availableTiles.push({ row: i, col: j });
+                    availableCells.push({ row: i, col: j });
                 }
             }
         }
+        if (availableCells.length === 0) {
+            return null;
+        }
+        const randomIndex = Math.floor(Math.random() * availableCells.length);
+        return availableCells[randomIndex];
+    }
 
-        if (availableTiles.length > 0) {
-            const randomIndex = Math.floor(Math.random() * availableTiles.length);
-            const { row, col } = availableTiles[randomIndex];
-            board[row][col] = Math.random() < 0.9 ? 2 : 4;
+    function placeRandomTile() {
+        const cell = getRandomAvailableCell();
+        if (cell !== null) {
+            const value = Math.random() < 0.9 ? 2 : 4;
+            board[cell.row][cell.col] = value;
         }
     }
 
-    // Update the game board UI
     function updateBoard() {
-        const gameBoardElement = document.getElementById('game-board');
-        gameBoardElement.innerHTML = '';
+        gameContainer.innerHTML = ''; // Clear the previous state
 
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
                 const tileValue = board[i][j];
-                const tileElement = document.createElement('div');
-                tileElement.className = 'tile';
-                tileElement.textContent = tileValue !== 0 ? tileValue : '';
-                tileElement.style.backgroundColor = getTileColor(tileValue);
-                gameBoardElement.appendChild(tileElement);
+                const tile = document.createElement('div');
+                tile.className = `tile tile-${tileValue}`;
+                tile.textContent = tileValue !== 0 ? tileValue : '';
+                gameContainer.appendChild(tile);
+                positionTile(tile, i, j);
             }
         }
+
+        updateScore();
     }
 
-    // Get the background color for a tile based on its value
-    function getTileColor(value) {
-        switch (value) {
-            case 2:
-                return '#eee4da';
-            case 4:
-                return '#ede0c8';
-            case 8:
-                return '#f2b179';
-            case 16:
-                return '#f59563';
-            case 32:
-                return '#f67c5f';
-            case 64:
-                return '#f65e3b';
-            case 128:
-                return '#edcf72';
-            case 256:
-                return '#edcc61';
-            case 512:
-                return '#edc850';
-            case 1024:
-                return '#edc53f';
-            case 2048:
-                return '#edc22e';
-            default:
-                return '#ccc0b3';
+    function updateScore() {
+        scoreElement.textContent = `Score: ${score}`;
+        if (score > highScore) {
+            highScore = score;
+            highScoreElement.textContent = `High Score: ${highScore}`;
         }
     }
 
-    // Handle key presses for game movement
-    function handleKeyPress(event) {
-        // Add your logic for handling key presses (up, down, left, right)
-        // Update the board, add a new tile, and update the UI
-        if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-            moveTiles(event.key);
-            addNewTile();
-            updateBoard();
-        }
-
-        if (hasPlayerWon()) {
-            alert('Congratulations! You won!'); // You can replace this with your winning message or UI
-            resetGame();
-        } else if (isGameOver()) {
-            alert('Game Over!'); // You can replace this with your endgame message or UI
-            resetGame();
-        }
+    function positionTile(tile, row, col) {
+        const tileSize = 75; // Adjust as needed
+        const top = row * tileSize;
+        const left = col * tileSize;
+        tile.style.top = `${top}px`;
+        tile.style.left = `${left}px`;
     }
 
-    function moveTiles(direction) {
-        // Clone the board to check for changes later
-        const previousBoard = board.map(row => row.slice());
-
-        switch (direction) {
-            case 'ArrowUp':
-                moveUp();
-                break;
-            case 'ArrowDown':
-                moveDown();
-                break;
-            case 'ArrowLeft':
-                moveLeft();
-                break;
-            case 'ArrowRight':
-                moveRight();
-                break;
-        }
-
-        // Check for changes and update the board if needed
-        if (!isBoardEqual(previousBoard, board)) {
-            updateBoard();
-        }
-    }
-
-    // Move tiles to the left
     function moveLeft() {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 1; j < boardSize; j++) {
+        let moved = false;
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 1; j < 4; j++) {
                 if (board[i][j] !== 0) {
-                    let k = j - 1;
-                    while (k >= 0 && board[i][k] === 0) {
-                        board[i][k] = board[i][k + 1];
-                        board[i][k + 1] = 0;
-                        k--;
+                    let col = j;
+                    while (col > 0 && board[i][col - 1] === 0) {
+                        board[i][col - 1] = board[i][col];
+                        board[i][col] = 0;
+                        col--;
+                        moved = true;
                     }
 
-                    if (k >= 0 && board[i][k] === board[i][k + 1]) {
-                        board[i][k] *= 2;
-                        board[i][k + 1] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    // Move tiles to the right
-    function moveRight() {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = boardSize - 2; j >= 0; j--) {
-                if (board[i][j] !== 0) {
-                    let k = j + 1;
-                    while (k < boardSize && board[i][k] === 0) {
-                        board[i][k] = board[i][k - 1];
-                        board[i][k - 1] = 0;
-                        k++;
-                    }
-
-                    if (k < boardSize && board[i][k] === board[i][k - 1]) {
-                        board[i][k] *= 2;
-                        board[i][k - 1] = 0;
+                    if (col > 0 && board[i][col - 1] === board[i][col]) {
+                        board[i][col - 1] *= 2;
+                        score += board[i][col - 1];
+                        board[i][col] = 0;
+                        moved = true;
                     }
                 }
             }
         }
-    }
 
-    // Move tiles up
-    function moveUp() {
-        for (let j = 0; j < boardSize; j++) {
-            for (let i = 1; i < boardSize; i++) {
-                if (board[i][j] !== 0) {
-                    let k = i - 1;
-                    while (k >= 0 && board[k][j] === 0) {
-                        board[k][j] = board[k + 1][j];
-                        board[k + 1][j] = 0;
-                        k--;
-                    }
-
-                    if (k >= 0 && board[k][j] === board[k + 1][j]) {
-                        board[k][j] *= 2;
-                        board[k + 1][j] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    // Move tiles down
-    function moveDown() {
-        for (let j = 0; j < boardSize; j++) {
-            for (let i = boardSize - 2; i >= 0; i--) {
-                if (board[i][j] !== 0) {
-                    let k = i + 1;
-                    while (k < boardSize && board[k][j] === 0) {
-                        board[k][j] = board[k - 1][j];
-                        board[k - 1][j] = 0;
-                        k++;
-                    }
-
-                    if (k < boardSize && board[k][j] === board[k - 1][j]) {
-                        board[k][j] *= 2;
-                        board[k - 1][j] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    // Check if two boards are equal
-    function isBoardEqual(board1, board2) {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
-                if (board1[i][j] !== board2[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Move tiles and merge if possible
-    function moveTiles(direction) {
-        // Clone the board to check for changes later
-        const previousBoard = board.map(row => row.slice());
-
-        switch (direction) {
-            case 'ArrowUp':
-                moveUp();
-                break;
-            case 'ArrowDown':
-                moveDown();
-                break;
-            case 'ArrowLeft':
-                moveLeft();
-                break;
-            case 'ArrowRight':
-                moveRight();
-                break;
-        }
-
-        // Check for changes and update the board if needed
-        if (!isBoardEqual(previousBoard, board)) {
+        if (moved) {
+            placeRandomTile();
             updateBoard();
         }
     }
 
-    // Move tiles to the left
-    function moveLeft() {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 1; j < boardSize; j++) {
-                if (board[i][j] !== 0) {
-                    let k = j - 1;
-                    while (k >= 0 && board[i][k] === 0) {
-                        board[i][k] = board[i][k + 1];
-                        board[i][k + 1] = 0;
-                        k--;
-                    }
-
-                    if (k >= 0 && board[i][k] === board[i][k + 1]) {
-                        board[i][k] *= 2;
-                        board[i][k + 1] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    // Move tiles to the right
     function moveRight() {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = boardSize - 2; j >= 0; j--) {
+        let moved = false;
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 2; j >= 0; j--) {
                 if (board[i][j] !== 0) {
-                    let k = j + 1;
-                    while (k < boardSize && board[i][k] === 0) {
-                        board[i][k] = board[i][k - 1];
-                        board[i][k - 1] = 0;
-                        k++;
+                    let col = j;
+                    while (col < 3 && board[i][col + 1] === 0) {
+                        board[i][col + 1] = board[i][col];
+                        board[i][col] = 0;
+                        col++;
+                        moved = true;
                     }
 
-                    if (k < boardSize && board[i][k] === board[i][k - 1]) {
-                        board[i][k] *= 2;
-                        board[i][k - 1] = 0;
+                    if (col < 3 && board[i][col + 1] === board[i][col]) {
+                        board[i][col + 1] *= 2;
+                        score += board[i][col + 1];
+                        board[i][col] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+
+        if (moved) {
+            placeRandomTile();
+            updateBoard();
+        }
     }
 
-    // Move tiles up
     function moveUp() {
-        for (let j = 0; j < boardSize; j++) {
-            for (let i = 1; i < boardSize; i++) {
+        let moved = false;
+
+        for (let j = 0; j < 4; j++) {
+            for (let i = 1; i < 4; i++) {
                 if (board[i][j] !== 0) {
-                    let k = i - 1;
-                    while (k >= 0 && board[k][j] === 0) {
-                        board[k][j] = board[k + 1][j];
-                        board[k + 1][j] = 0;
-                        k--;
+                    let row = i;
+                    while (row > 0 && board[row - 1][j] === 0) {
+                        board[row - 1][j] = board[row][j];
+                        board[row][j] = 0;
+                        row--;
+                        moved = true;
                     }
 
-                    if (k >= 0 && board[k][j] === board[k + 1][j]) {
-                        board[k][j] *= 2;
-                        board[k + 1][j] = 0;
+                    if (row > 0 && board[row - 1][j] === board[row][j]) {
+                        board[row - 1][j] *= 2;
+                        score += board[row - 1][j];
+                        board[row][j] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+
+        if (moved) {
+            placeRandomTile();
+            updateBoard();
+        }
     }
 
-    // Move tiles down
     function moveDown() {
-        for (let j = 0; j < boardSize; j++) {
-            for (let i = boardSize - 2; i >= 0; i--) {
+        let moved = false;
+
+        for (let j = 0; j < 4; j++) {
+            for (let i = 2; i >= 0; i--) {
                 if (board[i][j] !== 0) {
-                    let k = i + 1;
-                    while (k < boardSize && board[k][j] === 0) {
-                        board[k][j] = board[k - 1][j];
-                        board[k - 1][j] = 0;
-                        k++;
+                    let row = i;
+                    while (row < 3 && board[row + 1][j] === 0) {
+                        board[row + 1][j] = board[row][j];
+                        board[row][j] = 0;
+                        row++;
+                        moved = true;
                     }
 
-                    if (k < boardSize && board[k][j] === board[k - 1][j]) {
-                        board[k][j] *= 2;
-                        board[k - 1][j] = 0;
+                    if (row < 3 && board[row + 1][j] === board[row][j]) {
+                        board[row + 1][j] *= 2;
+                        score += board[row + 1][j];
+                        board[row][j] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+
+        if (moved) {
+            placeRandomTile();
+            updateBoard();
+        }
     }
 
-    // Check if two boards are equal
-    function isBoardEqual(board1, board2) {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
-                if (board1[i][j] !== board2[i][j]) {
-                    return false;
-                }
+    function mergeTiles() {
+        // This function is already used within moveLeft, moveRight, moveUp, and moveDown
+        // It merges adjacent tiles with the same value
+    }
+
+    // Touch function starts here
+
+    // Function to handle touch start event
+    function handleTouchStart(event) {
+        const touchWithinGame = isTouchWithinGame(event.touches[0]);
+        if (touchWithinGame) {
+            initialX = event.touches[0].clientX;
+            initialY = event.touches[0].clientY;
+            event.preventDefault(); // Prevent default scrolling behavior
+        }
+    }
+
+    // Function to handle touch end event
+    function handleTouchEnd(event) {
+        // Determine the direction based on the initial and final touch positions
+        // Call the corresponding movement function (e.g., moveLeft, moveRight, moveUp, moveDown)
+        if (initialX === null || initialY === null) {
+            return; // Ignore if touch start coordinates are not set
+        }
+
+        const finalX = event.changedTouches[0].clientX;
+        const finalY = event.changedTouches[0].clientY;
+
+        const deltaX = finalX - initialX;
+        const deltaY = finalY - initialY;
+
+        // Determine the direction based on the difference in coordinates
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (deltaX > 0) {
+                moveRight();
+            } else {
+                moveLeft();
+            }
+        } else {
+            // Vertical swipe
+            if (deltaY > 0) {
+                moveDown();
+            } else {
+                moveUp();
             }
         }
-        return true;
+
+        if (isGameOver()) {
+            // Perform actions for game over
+            console.log('Game Over!');
+            // setTimeout(() => {
+            //     alert('Game Over!');
+            // }, 100);
+        }
+
+        // Reset initial touch coordinates
+        initialX = null;
+        initialY = null;
     }
 
-    // Check if the game is over
+    // Function to check if a touch event is within the game container
+    function isTouchWithinGame(touch) {
+        const rect = gameContainer.getBoundingClientRect();
+        const touchX = touch.clientX;
+        const touchY = touch.clientY;
+
+        return (
+            touchX >= rect.left &&
+            touchX <= rect.right &&
+            touchY >= rect.top &&
+            touchY <= rect.bottom
+        );
+    }
+
+    // Touch function ends here
+
     function isGameOver() {
-        // Check for empty cells
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
                 if (board[i][j] === 0) {
                     return false;
                 }
-            }
-        }
 
-        // Check for possible merges
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize - 1; j++) {
-                if (board[i][j] === board[i][j + 1]) {
+                if (
+                    (j < 3 && board[i][j] === board[i][j + 1]) ||
+                    (i < 3 && board[i][j] === board[i + 1][j])
+                ) {
                     return false;
                 }
             }
         }
 
-        for (let j = 0; j < boardSize; j++) {
-            for (let i = 0; i < boardSize - 1; i++) {
-                if (board[i][j] === board[i + 1][j]) {
-                    return false;
-                }
-            }
-        }
-
+        alert('Game Over! Your score: ' + score);
+        newGame();
         return true;
     }
 
-    // Check if the player has won
-    function hasPlayerWon() {
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
-                if (board[i][j] === 2048) {
-                    return true;
-                }
-            }
+    function handleKeyPress(event) {
+        switch (event.key) {
+            case 'ArrowLeft':
+                moveLeft();
+                break;
+            case 'ArrowRight':
+                moveRight();
+                break;
+            case 'ArrowUp':
+                moveUp();
+                break;
+            case 'ArrowDown':
+                moveDown();
+                break;
+            default:
+                return; // Ignore other key presses
         }
-        return false;
+
+        isGameOver();
     }
 
-
-    // Reset the game
-    function resetGame() {
-        // Reset the board, score, or any other game state variables
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
-                board[i][j] = 0;
-            }
-        }
+    function newGame() {
+        board = initializeBoard();
         score = 0;
-
-        // Initialize the board with two new tiles
-        addNewTile();
-        addNewTile();
-
-        // Update the board UI
+        placeRandomTile();
+        placeRandomTile();
         updateBoard();
     }
 
+    // Event listeners for touch events
+    gameContainer.addEventListener('touchstart', handleTouchStart);
+    gameContainer.addEventListener('touchend', handleTouchEnd);
 
-    // Initialize the game
-    initializeBoard();
 
-    // Add event listener for key presses
+    // Event listeners
+    newGameButton.addEventListener('click', newGame);
     document.addEventListener('keydown', handleKeyPress);
+
+    // Initial setup
+    newGame();
 });
