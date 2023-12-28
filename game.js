@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.getElementById('game-container');
-    const scoreElement = document.getElementById('score');
-    const highScoreElement = document.getElementById('high-score');
+    const scoreboardElement = document.getElementById('scoreboard');
     const newGameButton = document.getElementById('new-game-btn');
 
-    let score = 0;
-    let highScore = 0;
+    let score = 0; // Counter for the total scored on adding tiles
+    let highScore = 0; // Highest score scored in the session
+    let moveCounter = 0; // Counter for the number of tiles moved
     let board = [];
     let promptShown = false;
 
@@ -49,6 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to update the scoreboard
+    function updateScoreboard() {
+        if (score > highScore) {
+            highScore = score;
+        }
+        scoreboardElement.innerHTML = `Score: ${score} | High Score: ${highScore} | Moves: ${moveCounter}`;
+    }
+
+    // Function to update the game board
     function updateBoard() {
         gameContainer.innerHTML = ''; // Clear the previous state
 
@@ -61,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameContainer.appendChild(tile);
                 positionTile(tile, i, j);
 
+                // Check if the tile value is 2048 and the prompt hasn't been shown
                 if (tileValue === 2048 && !promptShown) {
                     // Prompt the user
                     const shouldContinue = window.confirm('Congratulations! You have solved 2048 the Game of 2s! Do you want to continue?');
@@ -76,16 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
-        updateScore();
-    }
-
-    function updateScore() {
-        scoreElement.textContent = `Score: ${score}`;
-        if (score > highScore) {
-            highScore = score;
-            highScoreElement.textContent = `High Score: ${highScore}`;
-        }
+        // Update the scoreboard
+        updateScoreboard();
     }
 
     function positionTile(tile, row, col) {
@@ -230,6 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
             initialX = event.touches[0].clientX;
             initialY = event.touches[0].clientY;
             event.preventDefault(); // Prevent default scrolling behavior
+            // Increment the move counter
+            moveCounter++;
         }
     }
 
@@ -271,6 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
             //     alert('Game Over!');
             // }, 100);
         }
+
+        // Update the game board after each touch
+        updateBoard();
 
         // Reset initial touch coordinates
         initialX = null;
@@ -315,6 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleKeyPress(event) {
+        moveCounter++;
         switch (event.key) {
             case 'ArrowLeft':
                 moveLeft();
@@ -338,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function newGame() {
         board = initializeBoard();
         score = 0;
+        moveCounter = 0;
         placeRandomTile();
         placeRandomTile();
         updateBoard();
