@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.getElementById('game-container');
-    const scoreboardElement = document.getElementById('scoreboard');
+    const scoreElement = document.querySelector('.score-box .value');
+    const bestScoreElement = document.querySelector('.best-box .value');
+    const movesElement = document.querySelector('.moves-box .value');
     const newGameButton = document.getElementById('new-game-btn');
 
     let score = 0; // Counter for the total scored on adding tiles
-    let highScore = 0; // Highest score scored in the session
+    let bestScore = 0; // Highest score scored in the session
     let moveCounter = 0; // Counter for the number of tiles moved
     let board = [];
     let promptShown = false;
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return newBoard;
     }
 
+    // Function to get random available cell
     function getRandomAvailableCell() {
         const availableCells = [];
         for (let i = 0; i < 4; i++) {
@@ -41,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return availableCells[randomIndex];
     }
 
+    // Function to place new random tile (mostly it will be used in move)
     function placeRandomTile() {
         const cell = getRandomAvailableCell();
         if (cell !== null) {
@@ -49,12 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to update the scoreboard
+    // Function to update the scoreboard display
     function updateScoreboard() {
-        if (score > highScore) {
-            highScore = score;
+        if (score > bestScore) {
+            bestScore = score;
         }
-        scoreboardElement.innerHTML = `Score: ${score} | High Score: ${highScore} | Moves: ${moveCounter}`;
+        // Update the score
+        scoreElement.textContent = score;
+
+        // Update the best score
+        bestScoreElement.textContent = bestScore;
+
+        // Update the moves
+        movesElement.textContent = moveCounter;
     }
 
     // Function to update the game board
@@ -82,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     // Set the promptShown flag to true after showing the prompt
                     promptShown = true;
-                    // If the user chooses to continue, you can add additional logic here
+                    // If the user chooses to continue, we need to add additional logic here
                 }
             }
         }
@@ -90,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScoreboard();
     }
 
+    // Function to position tile on gameboard
     function positionTile(tile, row, col) {
         const tileSize = 75; // Adjust as needed
         const top = row * tileSize;
@@ -98,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tile.style.left = `${left}px`;
     }
 
+    // Function to move tiles to the left
     function moveLeft() {
         let moved = false;
 
@@ -122,12 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // If tiles is moved then increase the move counter and update the scoreboard
+        // Place the random tile and update the board
         if (moved) {
+            moveCounter++;
+            updateScoreboard();
             placeRandomTile();
             updateBoard();
         }
     }
 
+    // Function to move tiles to the right
     function moveRight() {
         let moved = false;
 
@@ -153,11 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (moved) {
+            moveCounter++;
+            updateScoreboard();
             placeRandomTile();
             updateBoard();
         }
     }
 
+    // Function to move tiles to the up
     function moveUp() {
         let moved = false;
 
@@ -183,11 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (moved) {
+            moveCounter++;
+            updateScoreboard();
             placeRandomTile();
             updateBoard();
         }
     }
 
+    // Function to move tiles to the down
     function moveDown() {
         let moved = false;
 
@@ -213,6 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (moved) {
+            moveCounter++;
+            updateScoreboard();
             placeRandomTile();
             updateBoard();
         }
@@ -232,8 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
             initialX = event.touches[0].clientX;
             initialY = event.touches[0].clientY;
             event.preventDefault(); // Prevent default scrolling behavior
-            // Increment the move counter
-            moveCounter++;
         }
     }
 
@@ -300,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Touch function ends here
 
+    // Function to check if the game is over
     function isGameOver() {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -321,8 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    // Function to handle key presses
     function handleKeyPress(event) {
-        moveCounter++;
         switch (event.key) {
             case 'ArrowLeft':
                 moveLeft();
@@ -343,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isGameOver();
     }
 
+    // Function to start a new game whenever this function is called
     function newGame() {
         board = initializeBoard();
         score = 0;

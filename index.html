@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>2048 Game of 2s</title>
 </head>
+
 <body>
     <div class="container">
         <div id="game-container"></div>
-        <div id="scoreboard">Score: 0 | High Score: 0</div>
+        <div id="scoreboard">
+            <div class="score-box">
+                <div class="label">Score</div>
+                <div class="value">0</div>
+            </div>
+            <div class="best-box">
+                <div class="label">Best</div>
+                <div class="value">0</div>
+            </div>
+            <div class="moves-box">
+                <div class="label">Moves</div>
+                <div class="value">0</div>
+            </div>
+        </div>
         <button id="new-game-btn">New Game</button>
     </div>
     <script src="game.js"></script>
 </body>
+
 </html>
