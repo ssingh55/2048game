@@ -20,6 +20,14 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
+.cool-title {
+    text-align: center;
+    color: #776e65; /* Match the color with your game container or choose another color */
+    font-size:18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 .tile {
     width: 80px;
     height: 80px;
@@ -143,4 +151,10 @@ body {
     border-radius: 5px;
     width: 80%;
     margin: 10% auto;
+}
+
+/* Style the title in the Help modal */
+#help-modal h2 {
+    color: #333; /* Darker text color for the title */
+    margin-bottom: 10px;
 }
