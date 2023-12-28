@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bestScoreElement = document.querySelector('.best-box .value');
     const movesElement = document.querySelector('.moves-box .value');
     const newGameButton = document.getElementById('new-game-btn');
+    // Help button
+    const helpButton = document.getElementById('help-button');
+    helpButton.addEventListener('click', showHelp);
 
     let score = 0; // Counter for the total scored on adding tiles
     let bestScore = 0; // Highest score scored in the session
@@ -14,6 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Variables to store initial touch coordinates
     let initialX = null;
     let initialY = null;
+
+    // Function to show the help modal
+    function showHelp() {
+        const helpModal = document.getElementById('help-modal');
+        helpModal.style.display = 'block';
+    }
+
+    // Function to hide the help modal
+    function hideHelp() {
+        const helpModal = document.getElementById('help-modal');
+        helpModal.style.display = 'none';
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function (event) {
+        const helpModal = document.getElementById('help-modal');
+        if (event.target === helpModal) {
+            helpModal.style.display = 'none';
+        }
+    };
+
 
     // Function to initialize the game board
     function initializeBoard() {
@@ -390,3 +414,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial setup
     newGame();
 });
+
+// Function to show the help modal
+function showHelp() {
+    const helpModal = document.getElementById('help-modal');
+    helpModal.style.display = 'block';
+}
+
+// Function to hide the help modal
+function hideHelp() {
+    const helpModal = document.getElementById('help-modal');
+    helpModal.style.display = 'none';
+}
+
+// Close the modal if the user clicks outside of it
+window.onclick = function (event) {
+    const helpModal = document.getElementById('help-modal');
+    if (event.target === helpModal) {
+        helpModal.style.display = 'none';
+    }
+};

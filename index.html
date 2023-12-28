@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <title>2048 Game of 2s</title>
 </head>
-
 <body>
     <div class="container">
         <div id="game-container"></div>
@@ -26,7 +25,26 @@
             </div>
         </div>
         <button id="new-game-btn">New Game</button>
+        <!-- Help button -->
+        <button id="help-button">Help</button>
+
+        <!-- Help modal -->
+        <div id="help-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideHelp()">&times;</span>
+                <h2>How to Play</h2>
+                <p>Welcome to the 2048 Game! Here's how to play:</p>
+                <ul>
+                    <li>Use arrow keys (Up, Down, Left, Right) or swipe gestures to move tiles.</li>
+                    <li>Merge tiles with the same number to create a new tile with a doubled value.</li>
+                    <li>Your goal is to reach the 2048 tile!</li>
+                    <li>The game ends when there are no more valid moves or when you reach 2048.</li>
+                </ul>
+                <p>Have fun playing!</p>
+            </div>
+        </div>
     </div>
+
     <script src="game.js"></script>
 </body>
 
