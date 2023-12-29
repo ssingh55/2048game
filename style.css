@@ -12,7 +12,7 @@ body {
 
 #game-container {
     display: grid;
-    grid-template-columns: repeat(4, 80px);
+    grid-template-columns: repeat(4, 80px); /* Increase the size of columns */
     gap: 10px;
     background-color: #bbada0;
     padding: 10px;
@@ -29,8 +29,8 @@ body {
 }
 
 .tile {
-    width: 80px;
-    height: 80px;
+    width: 80px; /* Increase the size of tiles */
+    height: 80px; /* Increase the size of tiles */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,6 +53,24 @@ body {
 .tile-512 { background-color: #edc850; color: #f9f6f2; }
 .tile-1024 { background-color: #edc53f; color: #f9f6f2; }
 .tile-2048 { background-color: #edc22e; color: #f9f6f2; }
+
+.tile i {
+    font-size: 40px; /* Adjust the size of the icons */
+    color: #ffffff; /* Set the color of the icons */
+}
+
+/* Add the following styles to your existing CSS */
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tile-number {
+    font-size: 20px; /* Adjust the font size of the numbers */
+    margin-top: 5px; /* Adjust the margin as needed */
+}
+
 
 #scoreboard {
     margin-top: 20px;
@@ -158,3 +176,32 @@ body {
     color: #333; /* Darker text color for the title */
     margin-bottom: 10px;
 }
+
+.icon-background {
+    background-size: cover;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Add the following styles to your existing CSS */
+
+/*.tile {
+    /* Existing styles */
+
+    /* Add the following styles for background 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}*/
+
+/* Define the background images for each tile value using Font Awesome CDN */
+.tile-2 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#cat'); }
+.tile-4 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#dog'); }
+.tile-8 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#car'); }
+.tile-16 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#tree'); }
+/* Add more background images as needed */

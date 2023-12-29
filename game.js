@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const newGameButton = document.getElementById('new-game-btn');
     // Help button
     const helpButton = document.getElementById('help-button');
-    helpButton.addEventListener('click', showHelp);
 
     let score = 0; // Counter for the total scored on adding tiles
     let bestScore = 0; // Highest score scored in the session
@@ -23,21 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const helpModal = document.getElementById('help-modal');
         helpModal.style.display = 'block';
     }
-
-    // Function to hide the help modal
-    function hideHelp() {
-        const helpModal = document.getElementById('help-modal');
-        helpModal.style.display = 'none';
-    }
-
-    // Close the modal if the user clicks outside of it
-    window.onclick = function (event) {
-        const helpModal = document.getElementById('help-modal');
-        if (event.target === helpModal) {
-            helpModal.style.display = 'none';
-        }
-    };
-
 
     // Function to initialize the game board
     function initializeBoard() {
@@ -92,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         movesElement.textContent = moveCounter;
     }
 
-    // Function to update the game board
     function updateBoard() {
         gameContainer.innerHTML = ''; // Clear the previous state
 
@@ -101,7 +84,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tileValue = board[i][j];
                 const tile = document.createElement('div');
                 tile.className = `tile tile-${tileValue}`;
-                tile.textContent = tileValue !== 0 ? tileValue : '';
+
+                // Create a container for the icon and number
+                const contentContainer = document.createElement('div');
+                contentContainer.className = 'content-container';
+
+                // Set the background icon using the Font Awesome class
+                if (tileValue !== 0) {
+                    const icon = document.createElement('i');
+                    icon.className = `fas ${getIcon(tileValue)}`;
+                    // tile.appendChild(icon);
+                    contentContainer.appendChild(icon);
+
+
+                    // Add the tile value (number) to the tile element
+                    const tileNumber = document.createElement('div');
+                    tileNumber.className = 'tile-number';
+                    tileNumber.textContent = tileValue !== 0 ? tileValue : '';
+                    contentContainer.appendChild(tileNumber);
+                }
+
+                // Append the content container to the tile
+                tile.appendChild(contentContainer);
+
                 gameContainer.appendChild(tile);
                 positionTile(tile, i, j);
 
@@ -123,6 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // Update the scoreboard
         updateScoreboard();
+    }
+
+    function getIcon(value) {
+        // Define icon classes based on tile values
+        const iconClasses = {
+            2: 'fa-cat',   // Replace with actual icon class for 2
+            4: 'fa-dog',   // Replace with actual icon class for 4
+            8: 'fa-car',   // Replace with actual icon class for 8
+            16: 'fa-tree', // Replace with actual icon class for 16
+            // Add more mappings as needed
+        };
+
+        return `fas ${iconClasses[value] || 'fa-question'}`; // Default to a question mark if no mapping found
     }
 
     // Function to position tile on gameboard
@@ -407,19 +425,16 @@ document.addEventListener('DOMContentLoaded', () => {
     gameContainer.addEventListener('touchend', handleTouchEnd);
 
 
-    // Event listeners
+    // Event listeners for new game
     newGameButton.addEventListener('click', newGame);
     document.addEventListener('keydown', handleKeyPress);
+
+    // Event listeners for gelp button
+    helpButton.addEventListener('click', showHelp);
 
     // Initial setup
     newGame();
 });
-
-// Function to show the help modal
-function showHelp() {
-    const helpModal = document.getElementById('help-modal');
-    helpModal.style.display = 'block';
-}
 
 // Function to hide the help modal
 function hideHelp() {
