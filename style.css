@@ -40,6 +40,10 @@ body {
     background-color: #eee4da;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .tile-2 { background-color: #eee4da; color: #776e65; }
@@ -67,8 +71,8 @@ body {
 }
 
 .tile-number {
-    font-size: 20px; /* Adjust the font size of the numbers */
-    margin-top: 5px; /* Adjust the margin as needed */
+    font-size: 25px; /* Adjust the font size of the numbers */
+    margin-top: 1px; /* Adjust the margin as needed */
 }
 
 
@@ -187,21 +191,3 @@ body {
     left: 0;
     z-index: -1;
 }
-
-/* Add the following styles to your existing CSS */
-
-/*.tile {
-    /* Existing styles */
-
-    /* Add the following styles for background 
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}*/
-
-/* Define the background images for each tile value using Font Awesome CDN */
-.tile-2 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#cat'); }
-.tile-4 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#dog'); }
-.tile-8 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#car'); }
-.tile-16 { background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/sprites/solid.svg#tree'); }
-/* Add more background images as needed */

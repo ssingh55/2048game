@@ -133,10 +133,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function getIcon(value) {
         // Define icon classes based on tile values
         const iconClasses = {
-            2: 'fa-cat',   // Replace with actual icon class for 2
-            4: 'fa-dog',   // Replace with actual icon class for 4
+            2: 'fa-fish',   // Replace with actual icon class for 2
+            4: 'fa-paw',   // Replace with actual icon class for 4
             8: 'fa-car',   // Replace with actual icon class for 8
             16: 'fa-tree', // Replace with actual icon class for 16
+            32: 'fa-dog', // Replace with actual icon class for 32
+            64: 'fa-gamepad', // Replace with actual icon class for 64
+            128: 'fa-star', // Replace with actual icon class for 128
+            256: 'fa-sun', // Replace with actual icon class for 256
+            512: 'fa-moon', // Replace with actual icon class for 512
+            1024: 'fa-rocket', // Replace with actual icon class for 1024
+            2048: 'fa-trophy', // Replace with actual icon class for 2048
+            4096: 'fa-house', // Replace with actual icon class for 4096
             // Add more mappings as needed
         };
 
