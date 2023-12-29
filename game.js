@@ -1,3 +1,11 @@
+// Function to hide the help modal
+function hideHelp() {
+    const helpModal = document.getElementById('help-modal');
+    if (helpModal) {
+        helpModal.style.display = 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.getElementById('game-container');
     const scoreElement = document.querySelector('.score-box .value');
@@ -106,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Append the content container to the tile
                 tile.appendChild(contentContainer);
-
                 gameContainer.appendChild(tile);
                 positionTile(tile, i, j);
 
@@ -426,34 +433,76 @@ document.addEventListener('DOMContentLoaded', () => {
         placeRandomTile();
         placeRandomTile();
         updateBoard();
+        saveGameState(); // Save the initial state of the new game
+    }
+
+    // Function to save the game state to local storage
+    function saveGameState() {
+        const gameState = {
+            board,
+            score,
+            bestScore,
+            moveCounter,
+        };
+
+        // const serializedState = JSON.stringify(gameState);
+        localStorage.setItem('2048GameState', JSON.stringify(gameState));
+    }
+
+    // Function to load the game state from local storage
+    function loadGameState() {
+        const serializedState = localStorage.getItem('2048GameState');
+
+        try {
+            if (serializedState) {
+                const gameState = JSON.parse(serializedState);
+                board = gameState.board;
+                score = gameState.score;
+                bestScore = gameState.bestScore;
+                moveCounter = gameState.moveCounter;
+                // Update the UI or any other necessary tasks
+                updateBoard(); // Update the board after loading the game state
+                updateScoreboard(); // Update the scoreboard after loading the game state
+            }
+        } catch (error) {
+            console.error('Error loading game state:', error);
+            // Handle the error (e.g., start a new game or inform the user)
+            newGame();
+        }
     }
 
     // Event listeners for touch events
     gameContainer.addEventListener('touchstart', handleTouchStart);
     gameContainer.addEventListener('touchend', handleTouchEnd);
 
-
     // Event listeners for new game
-    newGameButton.addEventListener('click', newGame);
-    document.addEventListener('keydown', handleKeyPress);
+    newGameButton.addEventListener('click', () => {
+        newGame();
+        saveGameState(); // Save game state after starting a new game
+    });
+
+    document.addEventListener('keydown', (event) => {
+        handleKeyPress(event);
+        saveGameState(); // Save game state after each key press
+    });
 
     // Event listeners for gelp button
     helpButton.addEventListener('click', showHelp);
 
-    // Initial setup
-    newGame();
+    // condition to check if we any localstorage item
+    if (localStorage.getItem('2048GameState')) {
+        loadGameState();
+    } else {
+        // If no game state is found, start a new game
+        newGame();
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function (event) {
+        const helpModal = document.getElementById('help-modal');
+        if (event.target === helpModal) {
+            hideHelp();  // Call the hideHelp function here
+        }
+    };
 });
 
-// Function to hide the help modal
-function hideHelp() {
-    const helpModal = document.getElementById('help-modal');
-    helpModal.style.display = 'none';
-}
-
-// Close the modal if the user clicks outside of it
-window.onclick = function (event) {
-    const helpModal = document.getElementById('help-modal');
-    if (event.target === helpModal) {
-        helpModal.style.display = 'none';
-    }
-};
