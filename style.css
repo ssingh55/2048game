@@ -191,3 +191,20 @@ body {
     left: 0;
     z-index: -1;
 }
+
+#reshuffle-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #8f7a66;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#reshuffle-btn:hover {
+    background-color: #a08c79;
+}

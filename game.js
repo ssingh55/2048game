@@ -471,6 +471,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to reshuffle the existing tiles on the board
+    function reshuffleBoard() {
+        
+        const nonEmptyTilesBeforeShuffling = [];
+
+        // Collect all non-empty tiles before shuffling
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if (board[i][j] !== 0) {
+                    nonEmptyTilesBeforeShuffling.push({ value: board[i][j], row: i, col: j });
+                }
+            }
+        }
+
+        // Reset the board
+        board = initializeBoard();
+
+        // Shuffle the non-empty tiles and place them back on the board
+        for (const tile of nonEmptyTilesBeforeShuffling) {
+            let randomRow, randomCol;
+            do {
+                randomRow = Math.floor(Math.random() * 4);
+                randomCol = Math.floor(Math.random() * 4);
+            } while (board[randomRow][randomCol] !== 0);
+
+            board[randomRow][randomCol] = tile.value;
+        }
+
+        // Update the UI
+        updateBoard();
+    }
+
+    // Event listener for reshuffle button
+    const reshuffleButton = document.getElementById('reshuffle-btn');
+    if (reshuffleButton) {
+        reshuffleButton.addEventListener('click', () => {
+            reshuffleBoard();
+            saveGameState(); // Save game state after reshuffling the board
+        });
+    }
+
+
     // Event listeners for touch events
     gameContainer.addEventListener('touchstart', handleTouchStart);
     gameContainer.addEventListener('touchend', handleTouchEnd);
