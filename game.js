@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const bestScoreElement = document.querySelector('.best-box .value');
     const movesElement = document.querySelector('.moves-box .value');
     const newGameButton = document.getElementById('new-game-btn');
-    // Help button
     const helpButton = document.getElementById('help-button');
 
     let score = 0; // Counter for the total scored on adding tiles
     let bestScore = 0; // Highest score scored in the session
     let moveCounter = 0; // Counter for the number of tiles moved
     let board = [];
-    let promptShown = false;
 
     // Variables to store initial touch coordinates
     let initialX = null;
@@ -118,18 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 positionTile(tile, i, j);
 
                 // Check if the tile value is 2048 and the prompt hasn't been shown
-                if (tileValue === 2048 && !promptShown) {
-                    // Prompt the user
-                    const shouldContinue = window.confirm('Congratulations! You have solved 2048 the Game of 2s! Do you want to continue?');
+                if (tileValue === 2048) {
+                    showCongratulationModal();
 
-                    if (!shouldContinue) {
-                        // If the user chooses not to continue, start a new game
-                        newGame();
-                        return;
-                    }
-                    // Set the promptShown flag to true after showing the prompt
-                    promptShown = true;
-                    // If the user chooses to continue, we need to add additional logic here
                 }
             }
         }
@@ -181,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         col--;
                         moved = true;
                     }
-
                     if (col > 0 && board[i][col - 1] === board[i][col]) {
                         board[i][col - 1] *= 2;
                         score += board[i][col - 1];
@@ -430,6 +418,24 @@ document.addEventListener('DOMContentLoaded', () => {
         newGame();
     }
 
+    // Function to show the congratulation modal
+    function showCongratulationModal() {
+        const congratulationModal = document.getElementById('congratulation-modal');
+
+        // Check if the congratulation modal has been shown in the local storage
+        const congratulationShownInLocalStorage = localStorage.getItem('congratulationShown');
+        if (board.flat().includes(2048) && congratulationShownInLocalStorage !== 'true') {
+            congratulationModal.style.display = 'block';
+            localStorage.setItem('congratulationShown', 'true');
+        }
+    }
+
+    // Function to hide the congratulation modal
+    function hideCongratulationModal() {
+        const congratulationModal = document.getElementById('congratulation-modal');
+        congratulationModal.style.display = 'none';
+    }
+
     // Function to handle key presses
     function handleKeyPress(event) {
         switch (event.key) {
@@ -467,6 +473,9 @@ document.addEventListener('DOMContentLoaded', () => {
         placeRandomTile();
         updateBoard();
         saveGameState(); // Save the initial state of the new game
+
+        // Reset the congratulationShown flag in both local
+        localStorage.setItem('congratulationShown', 'false');
     }
 
     // Function to save the game state to local storage
@@ -545,6 +554,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Event listener for continue button in the congratulation modal
+    const continueButton = document.getElementById('continue-button');
+    if (continueButton) {
+        continueButton.addEventListener('click', () => {
+            saveGameState();
+            hideCongratulationModal();
+            // Add any logic here for continuing the game after congratulation
+        });
+    }
+
+    const restartButton = document.getElementById('restart-button');
+    if (restartButton) {
+        restartButton.addEventListener('click', function () {
+            // Call the function to start a new game
+            newGame();
+            saveGameState(); // Save game state after starting a new game
+            hideCongratulationModal();
+        });
+    }
 
     // Event listeners for touch events
     gameContainer.addEventListener('touchstart', handleTouchStart);

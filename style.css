@@ -266,3 +266,66 @@ body {
 #game-over-modal #retry-button:hover {
     background-color: #45a049;
 }
+
+/* CSS for Congratulation Block */
+#congratulation-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 2;
+}
+
+#congratulation-modal h2 {
+    color: #4CAF50;
+}
+
+#congratulation-modal p {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#congratulation-modal button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+/* CSS for Continue and Restart Buttons */
+#continue-button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#congratulation-modal #continue-button:hover,
+#congratulation-modal #restart-button:hover {
+    background-color: #2980b9;
+}
+
+#congratulation-modal #restart-button {
+    background-color: #e74c3c; /* Red color for restart button */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
