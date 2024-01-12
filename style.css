@@ -23,7 +23,7 @@ body {
 .cool-title {
     text-align: center;
     color: #776e65; /* Match the color with your game container or choose another color */
-    font-size:18px;
+    font-size: 18px;
     margin-bottom: 10px;
     font-weight: bold;
 }
@@ -40,7 +40,6 @@ body {
     background-color: #eee4da;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -57,7 +56,6 @@ body {
 .tile-512 { background-color: #edc850; color: #f9f6f2; }
 .tile-1024 { background-color: #edc53f; color: #f9f6f2; }
 .tile-2048 { background-color: #edc22e; color: #f9f6f2; }
-
 .tile i {
     font-size: 40px; /* Adjust the size of the icons */
     color: #ffffff; /* Set the color of the icons */
@@ -126,7 +124,8 @@ body {
 
 #new-game-btn:hover,
 #help-button:hover {
-    background-color: #a08c79;}
+    background-color: #a08c79;
+}
 
 /* Modal styles */
 .modal {
@@ -167,7 +166,8 @@ body {
 
 /* Update the background color of the Help modal content */
 #help-modal .modal-content {
-    background-color: #f8f8f8; /* Light gray background color */
+    background-color: #f8f8f8;
+    /* Light gray background color */
     padding: 20px;
     border: 1px solid #888;
     border-radius: 5px;
@@ -207,4 +207,56 @@ body {
 
 #reshuffle-btn:hover {
     background-color: #a08c79;
+}
+
+/* Add a default style for modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(51, 51, 51, 0.8); /* Dark gray with transparency */
+    padding: 20px;
+    border-radius: 10px;
+    color: rgba(12, 12, 12, 0.9); /* White with transparency */
+    z-index: 2;
+}
+
+/* Style the modal content */
+.modal-content {
+    text-align: center;
+}
+
+/* Style the close button */
+.close {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Add a hover effect for the close button */
+.close:hover {
+    color: #bbb;
+}
+
+/* Style the retry button */
+#retry-button {
+    background-color: #4caf50; /* Green */
+    color: rgba(255, 255, 255, 0.9); /* White with transparency */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Add a hover effect for the retry button */
+#retry-button:hover {
+    background-color: #45a049;
 }

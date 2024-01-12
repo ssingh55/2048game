@@ -57,6 +57,15 @@
                 <p>Have fun playing!</p>
             </div>
         </div>
+        <!-- Game over modal -->
+        <div id="game-over-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideGameOverModal()">&times;</span>
+                <h2>Game Over!</h2>
+                <p>Your score: <span id="game-over-score">0</span></p>
+                <button id="retry-button">Retry</button>
+            </div>
+        </div>
     </div>
 
     <script src="game.js"></script>

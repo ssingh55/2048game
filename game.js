@@ -352,9 +352,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameOver()) {
             // Perform actions for game over
             console.log('Game Over!');
-            // setTimeout(() => {
-            //     alert('Game Over!');
-            // }, 100);
         }
 
         // Update the game board after each touch
@@ -398,9 +395,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        alert('Game Over! Your score: ' + score);
-        newGame();
+        showGameOverModal();
         return true;
+    }
+
+    // Function to show the game over modal
+    function showGameOverModal() {
+        const modal = document.getElementById('game-over-modal');
+        const scoreElement = document.getElementById('game-over-score');
+        scoreElement.textContent = score;
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Add the 'game-over' class to the body
+        document.body.classList.add('game-over');
+    }
+
+    // Function to hide the game over modal
+    function hideGameOverModal() {
+        const modal = document.getElementById('game-over-modal');
+        modal.style.display = 'none';
+
+        // Reset the body class when hiding the modal
+        document.body.classList.remove('game-over');
+    }
+
+    // Function to retry the game
+    function retryGame() {
+        hideGameOverModal();
+        newGame();
     }
 
     // Function to handle key presses
@@ -427,6 +451,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to start a new game whenever this function is called
     function newGame() {
+        // Hide the game over modal when starting a new game
+        const modal = document.getElementById('game-over-modal');
+        modal.style.display = 'none';
+
+        // Reset the body class when starting a new game
+        document.body.classList.remove('game-over');
         board = initializeBoard();
         score = 0;
         moveCounter = 0;
@@ -473,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to reshuffle the existing tiles on the board
     function reshuffleBoard() {
-        
+
         const nonEmptyTilesBeforeShuffling = [];
 
         // Collect all non-empty tiles before shuffling
@@ -531,6 +561,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners for gelp button
     helpButton.addEventListener('click', showHelp);
 
+    // Event listener for retry button
+    const retryButton = document.getElementById('retry-button');
+    if (retryButton) {
+        retryButton.addEventListener('click', retryGame);
+    }
+
     // condition to check if we any localstorage item
     if (localStorage.getItem('2048GameState')) {
         loadGameState();
@@ -547,4 +583,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 });
-
