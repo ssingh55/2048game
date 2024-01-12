@@ -360,6 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset initial touch coordinates
         initialX = null;
         initialY = null;
+
+        // Call saveGameState after updating the board
+        saveGameState();
     }
 
     // Function to check if a touch event is within the game container
