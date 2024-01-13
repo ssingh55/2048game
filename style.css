@@ -28,6 +28,15 @@ body {
     font-weight: bold;
 }
 
+@media screen and (max-width: 600px) {
+    body {
+        height: 115vh;
+    }
+    .cool-title {
+        margin-top: 10px;
+    }
+}
+
 .tile {
     width: 80px;
     height: 80px;
@@ -162,8 +171,7 @@ body {
 
 /* Update the background color of the Help modal content */
 #help-modal .modal-content {
-    background-color: #f8f8f8;
-    /* Light gray background color */
+    background-color: #f8f8f8; /* Light gray background color */
     padding: 20px;
     border: 1px solid #888;
     border-radius: 5px;
@@ -174,8 +182,7 @@ body {
 
 /* Style the title in the Help modal */
 #help-modal h2 {
-    color: #333;
-    /* Darker text color for the title */
+    color: #333; /* Darker text color for the title */
     margin-bottom: 10px;
 }
 
@@ -231,12 +238,10 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(51, 51, 51, 0.8);
-    /* Dark gray with transparency */
+    background-color: rgba(51, 51, 51, 0.8); /* Dark gray with transparency */
     padding: 20px;
     border-radius: 10px;
-    color: rgba(12, 12, 12, 0.9);
-    /* White with transparency */
+    color: rgba(12, 12, 12, 0.9); /* White with transparency */
     z-index: 2;
 }
 
@@ -328,4 +333,84 @@ body {
     cursor: pointer;
     font-size: 16px;
     margin-right: 10px;
+}
+
+/* Styles for Donation Section */
+#donation-section {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+}
+
+.donation-links {
+    margin-top: 1px;
+}
+
+.donation-links a {
+    text-decoration: none;
+    margin: 0 10px;
+    display: inline-block;
+    padding: 10px 10px;
+    border: 2px solid #007bff; /* Border color for both buttons */
+    border-radius: 5px;
+    color: #007bff; /* Text color for both buttons */
+    background-color: transparent; /* Background color for both buttons */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+}
+
+#btc-donation,
+#upi-donation {
+    background-color: #b68150; /* Background color for Bitcoin button */
+    color: #fff; /* Text color for Bitcoin button */
+}
+
+#upi-donation:hover,
+#btc-donation:hover {
+    background-color: #007bff; /* Hover background color for both buttons */
+    color: #fff; /* Hover text color for both buttons */
+}
+
+.donation-links a {
+    position: relative;
+}
+
+.donation-links #btc-donation:hover::before {
+    content: "113L6u3QJcpURwBAxEP2ACpEDmBZdHcctY"; /* Tooltip text for Bitcoin button */
+}
+
+.donation-links #upi-donation:hover::before {
+    content: "Click to open the QR code"; /* Tooltip text for UPI button */
+}
+
+.donation-links a:hover::before {
+    position: absolute;
+    bottom: 100%; /* Position it just above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #776e65;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    opacity: 0; /* Initially invisible */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.donation-links a:hover::before {
+    opacity: 1; /* Make the tooltip visible on hover */
+}
+
+/* Styles for Navigation Menu Link */
+#menu-link {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#menu-link a {
+    text-decoration: none;
+    color: #fff;
 }
